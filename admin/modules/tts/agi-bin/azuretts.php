@@ -8,8 +8,7 @@ $argv = $_SERVER['argv'];
 $totalArgv = count($argv);
 if( $totalArgv > 1 ){
     for( $x = 1; $x < $totalArgv; $x++ ) {
-	$newstr = filter_var($argv[$x],FILTER_SANITIZE_STRING); 
-        switch($newstr)
+        switch($argv[$x])
         {
             case '--text':
                 $text = trim($argv[$x+1]);
@@ -24,6 +23,7 @@ if( $totalArgv > 1 ){
                 $gender = trim($argv[$x+1]);
             break;
             case '--file':
+		if(preg_match("/[a-z0-9]{32}.*/",$argv[$x+1]))
                 $filename = trim($argv[$x+1]);
             break;
             case '--azurekey':
@@ -50,6 +50,7 @@ azure_tts($text);
 die();
 
 function azure_tts($text) {
+
     global $key;
     global $region;
     global $language;
