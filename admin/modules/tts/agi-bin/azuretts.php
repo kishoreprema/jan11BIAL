@@ -23,7 +23,6 @@ if( $totalArgv > 1 ){
                 $gender = trim($argv[$x+1]);
             break;
             case '--file':
-		if(preg_match("/[a-z0-9]{32}.*/",$argv[$x+1]))
                 $filename = trim($argv[$x+1]);
             break;
             case '--azurekey':
@@ -87,8 +86,12 @@ function azure_tts($text) {
     curl_setopt($ch, CURLOPT_POSTFIELDS, $body);
     $content = curl_exec($ch);
     curl_close($ch);
-    
-    $fp = fopen("${filename}.alaw", 'w');
+    if(preg_match("/[a-z0-9]{32}.*/",$argv[$x+1]))
+    	$fp = fopen("${filename}.alaw", 'w');
+    else{
+	echo("file format not good");	
+	die;
+    }
     fwrite($fp, $content);
     fclose($fp);
 
