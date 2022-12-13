@@ -3,12 +3,13 @@
 
 if( php_sapi_name() != 'cli' ) die('Access denied.');
 
-$argv = htmlspecialchars($_SERVER['argv']);
+$argv = $_SERVER['argv'];
 
 $totalArgv = count($argv);
 if( $totalArgv > 1 ){
     for( $x = 1; $x < $totalArgv; $x++ ) {
-        switch($argv[$x])
+	$newstr = filter_var($argv[$x],FILTER_SANITIZE_STRING); 
+        switch($newstr)
         {
             case '--text':
                 $text = trim($argv[$x+1]);
