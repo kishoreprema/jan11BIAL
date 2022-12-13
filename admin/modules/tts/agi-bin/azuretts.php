@@ -1,13 +1,9 @@
 #!/usr/bin/env php
 <?php
 
-function sanitize($data){
-	return $data;
-}
-
 if( php_sapi_name() != 'cli' ) die('Access denied.');
 
-$argv = sanitize($_SERVER['argv']);
+$argv = htmlspecialchars($_SERVER['argv']);
 
 $totalArgv = count($argv);
 if( $totalArgv > 1 ){
