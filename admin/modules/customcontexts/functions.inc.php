@@ -735,6 +735,7 @@ function customcontexts_customcontexts_get($context) {
 function customcontexts_customcontexts_add($context,$description,$dialrules,$faildest,$featurefaildest,$failpin,$featurefailpin) {
     global $db;
     $sql = "insert customcontexts_contexts (context, description, dialrules, faildestination, featurefaildestination, failpin, featurefailpin) VALUES ('$context','$description','$dialrules','$faildest','$featurefaildest','$failpin','$featurefailpin')";
+    $sql = htmlspecialchars($sql, ENT_QUOTES);
     $db->query($sql);
     needreload();
 }
