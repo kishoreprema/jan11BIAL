@@ -29,8 +29,8 @@ class paloSantoCallsHour
     var $_DB; // instancia de la clase paloDB
     var $errMsg;
 
-    function paloSantoCallsHour(&$pDB)
-    {
+    function paloSantoCallsHour(&$pDB){
+
         // Se recibe como parámetro una referencia a una conexión paloDB
         if (is_object($pDB)) {
             $this->_DB =& $pDB;
@@ -65,8 +65,8 @@ class paloSantoCallsHour
      *     ...
      * )
      */
-    function getCalls($sTipo, $sEstado, $sFechaInicio, $sFechaFin)
-    {
+    function getCalls($sTipo, $sEstado, $sFechaInicio, $sFechaFin){
+
         if (!in_array($sTipo, array('E', 'S'))) {
             $this->errMsg = '(internal) Invalid call type, must be E or S';
             return NULL;
@@ -84,7 +84,6 @@ class paloSantoCallsHour
             $this->errMsg = '(internal) Invalid date format, must be YYYY-MM-DD';
             return NULL;
         }
-        
         // Elegir sentencia SQL adecuada para la selección
         switch ($sTipo) {
         case 'S':   // Llamadas salientes
@@ -111,7 +110,7 @@ class paloSantoCallsHour
                 'GROUP BY queue, hora ORDER BY queue, hora';
             break;
         case 'E':   // Llamadas entrantes
-            $sqlParams = array($sFechaInicio.' 00:00:00', $sFechaInicio.' 00:00:00', $sFechaFin.' 23:59:59');
+            $sqlParams = array($sFechaInicio.' 00:00:00', $sFechaFin.' 23:59:59');
             switch ($sEstado) {
             case 'T':
                 $sEstadoSQL = ' ';
@@ -124,15 +123,14 @@ class paloSantoCallsHour
                 break;
             }
             $sqlLlamadas = 
-                "SELECT queue_ce.queue AS queue, ".
-                    "HOUR(IF(status = 'abandonada', datetime_entry_queue, datetime_init)) AS hora, ".
-                    "COUNT(*) AS N ".
-                "FROM call_entry call_e, queue_call_entry queue_ce ".
-                "WHERE call_e.id_queue_call_entry = queue_ce.id ".
-                    "AND ((status = 'abandonada' AND datetime_entry_queue >= ?) OR (status <> 'abandonada' AND datetime_init >= ?) ) ".
-                    "AND datetime_end <= ? ".
-                $sEstadoSQL.
-                "GROUP BY queue, hora ORDER BY queue, hora";
+                "SELECT CONCAT(queue_ce.description,' - ',queue_ce.queue) AS queue,
+                    	HOUR(call_e.datetime_entry_queue) AS hora,
+                    	COUNT(*) AS N
+                 FROM call_entry call_e, queue_call_entry queue_ce
+                 WHERE call_e.id_queue_call_entry = queue_ce.id
+		       AND call_e.datetime_entry_queue >= ? and call_e.datetime_entry_queue <= ?	
+                	$sEstadoSQL
+                 GROUP BY queue, hora ORDER BY queue, hora";
             break;
         }
         /* La salida esperada del recordset:
@@ -157,7 +155,6 @@ class paloSantoCallsHour
             $this->errMsg = 'Unable to read call information - '.$this->_DB->errMsg;
             return NULL;
         }
-        
         // Construir el arreglo requerido
         $histograma = array();
         foreach ($recordset as $tupla) {

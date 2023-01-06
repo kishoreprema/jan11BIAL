@@ -49,7 +49,6 @@ azure_tts($text);
 die();
 
 function azure_tts($text) {
-
     global $key;
     global $region;
     global $language;
@@ -86,12 +85,8 @@ function azure_tts($text) {
     curl_setopt($ch, CURLOPT_POSTFIELDS, $body);
     $content = curl_exec($ch);
     curl_close($ch);
-    if(preg_match("/[a-z0-9]{32}.*/",$argv[$x+1]))
-    	$fp = fopen("${filename}.alaw", 'w');
-    else{
-	echo("file format not good");	
-	die;
-    }
+    
+    $fp = fopen("${filename}.alaw", 'w');
     fwrite($fp, $content);
     fclose($fp);
 

@@ -26,32 +26,8 @@ require_once "libs/misc.lib.php";
 require_once "libs/paloSantoConfig.class.php";
 require_once "libs/paloSantoGrid.class.php";
 
-if (!function_exists('_tr')) {
-    function _tr($s)
-    {
-        global $arrLang;
-        return isset($arrLang[$s]) ? $arrLang[$s] : $s;
-    }
-}
-if (!function_exists('load_language_module')) {
-    function load_language_module($module_id, $ruta_base='')
-    {
-        $lang = get_language($ruta_base);
-        include_once $ruta_base."modules/$module_id/lang/en.lang";
-        $lang_file_module = $ruta_base."modules/$module_id/lang/$lang.lang";
-        if ($lang != 'en' && file_exists("$lang_file_module")) {
-            $arrLangEN = $arrLangModule;
-            include_once "$lang_file_module";
-            $arrLangModule = array_merge($arrLangEN, $arrLangModule);
-        }
+function _moduleContent(&$smarty, $module_name){
 
-        global $arrLang;
-        global $arrLangModule;
-        $arrLang = array_merge($arrLang,$arrLangModule);
-    }
-}
-function _moduleContent(&$smarty, $module_name)
-{
     require_once "modules/$module_name/libs/paloSantoCallsHour.class.php";
 
     #incluir el archivo de idioma de acuerdo al que este seleccionado
@@ -239,8 +215,7 @@ function listHistogram($pDB, $smarty, $module_name, $local_templates_dir)
               ) ;
         $sContenido = $oGrid->fetchGrid($arrGrid, $arrData, $arrLang);
         if (!$bExportando) {
-            if (strpos($sContenido, '<form') === FALSE)
-                $sContenido = "<form  method=\"POST\" style=\"margin-bottom:0;\" action=\"$url\">$sContenido</form>";
+		return $sContenido.$smarty->fetch("$local_templates_dir/graphic-image.tpl");
         }
         return $sContenido;
     }

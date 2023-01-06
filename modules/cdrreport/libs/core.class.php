@@ -355,7 +355,6 @@ class core_CDR
             'totalcdrcount' =>  $tupla[0],
             'cdrs'          =>  array(),
         );
-
         if ($infoCDRs['totalcdrcount'] > 0) {
             $sql = 
                 'SELECT calldate, src, dst, channel, dstchannel, disposition, '.
@@ -388,6 +387,7 @@ class core_CDR
                     strtotime($infoCDRs['cdrs'][$i]['calldate']));
             }
         }
+
 
         return $infoCDRs;
     }

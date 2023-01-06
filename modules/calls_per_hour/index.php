@@ -98,7 +98,7 @@ function listHistogram($pDB, $smarty, $module_name, $local_templates_dir)
 
     // Tipo de llamada
     $comboTipos = array(
-        "E" => _tr("Ingoing"),
+        "E" => _tr("Incoming"),
         "S" => _tr("Outgoing")
     );
     $sTipoLlamada = 'E';

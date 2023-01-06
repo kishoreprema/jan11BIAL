@@ -49,7 +49,8 @@ class paloSantoLoginLogout {
 
     function ivr_menus(){
 
-	$sql = "SELECT distinct userdeftype FROM cel order by userdeftype";
+	$ivr_menus = Array("" => "");
+	$sql = "SELECT distinct eventtype FROM cel order by eventtype";
 	$records  = $this->_DB->fetchTable($sql);
             foreach($records as $key => $record)
                     $ivr_menus[$record[0]] =  $record[0];
@@ -70,7 +71,7 @@ class paloSantoLoginLogout {
             return NULL;
         }
 	if(isset($sMenu) and !empty($sMenu))
-		$cond = "AND userdeftype='{$sMenu}'";
+		$cond = "AND eventtype='{$sMenu}'";
 
     	$sql = <<<SQL_REGISTROS
 		SELECT uniqueid,eventtime,cid_num,userdeftype,appdata From cel 
@@ -104,7 +105,7 @@ SQL_REGISTROS;
        	         return NULL;
        	     }
        	     if(isset($sMenu) and !empty($sMenu))
-       	             $cond = "AND userdeftype='{$sMenu}'";  
+       	             $cond = "AND eventtype='{$sMenu}'";  
 
 	     $sql = "SELECT userdeftype,count(userdeftype) FROM cel
 		     WHERE userdeftype != '' and eventtime between '{$sFechaInicio}' and '{$sFechaFin}'

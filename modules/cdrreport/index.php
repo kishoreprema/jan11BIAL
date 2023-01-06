@@ -297,6 +297,7 @@ function _moduleContent(&$smarty, $module_name)
     $timeInSecs = $paramFiltro['timeInSecs'];
     $arrResult = $oCDR->listarCDRs($paramFiltro, $limit, 0, $filterLocalChannel);
     $total     = count($arrResult['cdrs']);
+    //var_dump($total);
 
     if(is_array($arrResult['cdrs']) && $total>0) {
         foreach($arrResult['cdrs'] as $key => $value) {

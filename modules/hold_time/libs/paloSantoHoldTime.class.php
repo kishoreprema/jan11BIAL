@@ -106,9 +106,8 @@ class paloSantoHoldTime
         	$sPeticionSQL = <<<SQL_INCOMING
 SELECT concat(queue_call_entry.description,'-',queue_call_entry.queue) as queue, call_entry.duration_wait, COUNT(*) AS N
 FROM call_entry, queue_call_entry
-WHERE $sWhereCond AND call_entry.datetime_end <= ?
+WHERE $sWhereCond AND call_entry.datetime_entry_queue <= ?
     AND call_entry.id_queue_call_entry = queue_call_entry.id
-    AND call_entry.status IS NOT NULL
     AND call_entry.duration_wait IS NOT NULL
 GROUP BY queue, duration_wait
 SQL_INCOMING;
