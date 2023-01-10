@@ -183,7 +183,7 @@ class Cisco extends BaseVendorResource
                 Header(($result["fc"] == "DBERROR") 
                     ? 'HTTP/1.1 500 Internal Server Error' 
                     : 'HTTP/1.1 400 Bad Request');
-                print $result['fm'].' - '.$result['fd'];
+                print htmlspecialchars($result['fm'].' - '.$result['fd'],ENT_QUOTES);
                 return;
             }
 
