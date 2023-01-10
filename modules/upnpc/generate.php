@@ -46,7 +46,7 @@ if ($_REQUEST){
                 $error = true;
                 break;
             }
-            echo $line."<br>";
+            echo  htmlspecialchars($line,ENT_QUOTES)."<br>";
             
             ob_flush();
             flush();
